@@ -6,11 +6,26 @@ import os
 from ultralytics import YOLO
 import av
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
+import gdown
+
+# -------------------------------
+# Ensure models directory exists
+# -------------------------------
+os.makedirs("models", exist_ok=True)
+
+# Google Drive file ID for best.pt
+BEST_ID = "1KAiUGSIXvpYtw7fWsNzUfuFsCELRGcc2"
+BEST_PATH = "models/best.pt"
+
+# Download best.pt if not already present
+if not os.path.exists(BEST_PATH):
+    url = f"https://drive.google.com/uc?id={BEST_ID}"
+    gdown.download(url, BEST_PATH, quiet=False)
 
 # -------------------------------
 # Load models
 # -------------------------------
-road_model = YOLO("models/best.pt")        # your trained model (damages, speed breakers)
+road_model = YOLO(BEST_PATH)            # your trained model (damages, speed breakers)
 vehicle_model = YOLO("models/yolov8s.pt")  # pretrained COCO model for people/vehicles
 
 # -------------------------------
